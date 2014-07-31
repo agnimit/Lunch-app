@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <style>
+            body {
+                padding-top: 50px;
+                padding-bottom: 20px;
+            }
+        </style>
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body style="background-color: #A3DAFF">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Lunches</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right">
+              <button on-click="return false;" id="submit" class="btn btn-success">Sign in</button>
+          </form>
+          <form class="navbar-form navbar-right" id="form" action="/api/auth.php?ws=true" method="POST" role="form">
+              <input type="text" placeholder="Name" name="user" class="form-control">
+              <input type="password" placeholder="Password" name="pass" class="form-control">
+          </form>
+          <form class="navbar-form navbar-right">
+              <p id ="retry"> <p>
+          </form>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container" style="color:#3399FF">
+        <h1>Hello, Playphone Employees!</h1>
+        <p>This is a wesbite used to give feedback on the lunches you guys eat everyday.</p>  
+        <p>Please login to get started.</p>
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class="container">
+      <h2>If you don't have an account, please create one now</h2>
+      <br>
+      <input type="text" placeholder="Name" name="user1" class="input-sm">
+      <br>
+      <br>
+      <input type="password" placeholder="Password" name="password1" class="input-sm">
+      <br>
+      <br>
+      <input type="password" placeholder="Retype Password" name="password2" class="input-sm">
+      <br>
+      <br>
+      <button on-click="return false;" id="create" class="btn btn-success">Create!</button>
+    </div>
+  
+    </div> <!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+
+        <script src="js/vendor/bootstrap.min.js"></script>
+
+        <script src="js/main.js"></script>
+		<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js"></script>
+		<script>
+			$("#submit").click(function(event) {
+				event.preventDefault();
+				var hashed = CryptoJS.SHA1($("input[name='pass']").val()+'vanilla');
+        $.ajax({
+            url: '/api/auth.php',
+            type: 'POST',
+            data: {"user" : $("input[name='user']").val(), "pass" : hashed.toString()},
+        }).done(function(data) {
+            if(data == '{"Condition":"Authenticated"}') {
+              console.log("Password right");
+              window.location = "http://agarwal.mobileplusinc.com/calendar.html";
+            } else {
+              $("#retry").html('<font id color="red">Please retype your username/password </font>');
+            }
+        })
+			});
+      $("input[name='pass']").keyup(function(event){
+          if(event.keyCode == 13){
+              $("#submit").click();
+          }
+      });
+      $("#create").click(function(event){
+        console.log($("input[name='user1']").val());
+        console.log($("input[name='password1']").val());
+        if($("input[name='password1']").val() != $("input[name='password2']").val()) {
+          alert("Passwords don't match");
+          window.location = "http://agarwal.mobileplusinc.com/";
+        }
+        event.preventDefault();
+        $.ajax({
+          url: '/api/users.php',
+          type: 'POST',
+          data: {"name" : $("input[name='user1']").val(), "password" : $("input[name='password1']").val()},
+        }) .done(function(data){
+          console.log(data + "this is the response");
+          if(data == '{"error":"Username Exists"}') {
+            alert("Sorry, Username already exists. Please try again");
+          }
+          else {
+            alert("Account created");
+            window.location = "http://agarwal.mobileplusinc.com/";
+          }
+        })
+      });
+		</script>
+    </body>
+</html>

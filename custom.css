@@ -1,0 +1,18 @@
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #B6DAFF;
+ }
+
+
+.ui-datepicker {
+   background: #333;
+   border: 1px solid #555;
+   color: #EEE;
+ }
+
+ .divider{
+    width:5px;
+    height:auto;
+    display:inline-block;
+}
+

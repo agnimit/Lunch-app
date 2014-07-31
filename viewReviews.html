@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <style>
+            body {
+                padding-top: 50px;
+                padding-bottom: 20px;
+            }
+        </style>
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+    <div class="container">
+        <div class="jumbotron">
+          <div class="container">
+            <font size="20"><h1>Here are all the reviews submitted</h1></font>
+          </div>
+        </div>
+
+        <link href="/twitter-bootstrap/twitter-bootstrap-v2/docs/assets/css/bootstrap.css" rel="stylesheet">  
+        </head>  
+        <body>
+        <div class="table-responsive">
+            <table class="table table-striped" id="reviews-table">  
+                <thead>  
+                    <tr>  
+                        <th>#</th>  
+                        <th>Name</th>  
+                        <th>Lunch</th>  
+                        <th>Rating</th>  
+                        <th>Comment</th>  
+                      </tr>  
+                    </thead>  
+                    <tbody>   
+                  </table>  
+            </body>
+        </div>
+    </div>
+    <h1>Write your review here</h1>
+    <br>
+    <p1>Rating</p1>
+    <br>
+    <label class="radio-inline">
+      <input name="radioGroup" id="radio1" value="option1" type="radio"> 1
+    </label>
+    <label class="radio-inline">
+      <input name="radioGroup" id="radio2" value="option2" checked="checked" type="radio"> 2
+    </label>
+    <label class="radio-inline">
+      <input name="radioGroup" id="radio3" value="option3" type="radio"> 3
+    </label>
+    <label class="radio-inline">
+      <input name="radioGroup" id="radio4" value="option3" type="radio"> 4
+    </label>
+    <label class="radio-inline">
+      <input name="radioGroup" id="radio5" value="option3" type="radio"> 5
+    </label>
+    </div>
+    <br>
+    <br>
+    <p1>Review of food</p1>
+    <br>
+    <textarea id="filled" class="form-control" rows="2" name = "textreview"></textarea>
+    <form id="form" action="api/reviews.php?"   method="POST" role="form"><br>
+    <button id="submit" class="btn btn-default btn-primary active">GO!</button>
+    <br>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        $.ajax({
+            url: '/api/reviews.php?lunch_id=1',
+            type: 'get',
+            dataType: 'json',
+        })
+        .done(function(data) {
+            console.log("success",data);
+            drawTable(data);
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+        
+        function drawTable(data) {
+            for (var i = 0; i < data.length; i++) {
+                drawRow(data[i]);
+            }
+            $("#reviews-table").append('</tbody>');
+        }
+
+        function drawRow(rowData) {
+            var row = $("<tr />")
+            $("#reviews-table").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+            row.append($("<td>" + rowData.id + "</td>"));
+            row.append($("<td>" + rowData.Name + "</td>"));
+            row.append($("<td>" + rowData.Lunch + "</td>"));
+            row.append($("<td>" + rowData.rating + "</td>"));
+            row.append($("<td>" + rowData.comment + "</td>"));
+        }
+    </script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+        <script>
+            $("#submit").click(function(event) {
+                $temp = "name=" + $.COOKIE('name') + "rating=" + ($"radioGroup").val() + ",review=" ($"textreview").val();
+                $('form').attr('action', "api/review.php?" + $temp);
+                $('#form').submit();
+            });
+        </script>
+</html>

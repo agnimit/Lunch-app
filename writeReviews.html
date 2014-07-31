@@ -1,0 +1,10 @@
+<script type="text/javascript">
+        $.ajax({
+            url: '/api/users.php?' + $.cookie('name'),
+            type: 'get',
+            dataType: 'json',
+        })
+        .done(function(data) {
+            window.userid = data[0].id;
+        })
+    </script>
